@@ -14,7 +14,7 @@ import org.springframework.nativex.extension.NativeImageHint;
 import org.springframework.nativex.extension.TypeInfo;
 import org.springframework.nativex.type.AccessBits;
 
-@NativeImageHint(typeInfos = {@TypeInfo(types = {GeoJsonConfiguration.class}, access = AccessBits.FULL_REFLECTION)})
+@NativeImageHint(typeInfos = {@TypeInfo(types = {GeoJsonConfiguration.class}, access = AccessBits.CONFIGURATION)})
 @Configuration
 class MongoConfig {
 
