@@ -15,7 +15,7 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-./gradlew clean $ARTIFACT:assemble
+./gradlew $ARTIFACT:clean $ARTIFACT:assemble
 MAINCLASS=$(cat $ARTIFACT/build/bootJarMainClassName)
 
 JAR="$ARTIFACT.jar"
