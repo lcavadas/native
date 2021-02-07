@@ -9,6 +9,10 @@ if [[ "$1" -eq "groovy" ]]; then
   EXTRA_ARGS="--initialize-at-build-time=sun.instrument.InstrumentationImpl"
 fi
 
+#if [[ "$1" -eq "java-jpa" ]]; then
+#  EXTRA_ARGS="--enable-all-security-services -H:+AddAllCharsets"
+#fi
+
 ARTIFACT=$1
 
 GREEN='\033[0;32m'
