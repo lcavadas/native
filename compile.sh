@@ -15,7 +15,6 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo "Packaging $ARTIFACT with Gradle"
 ./gradlew clean $ARTIFACT:assemble
 MAINCLASS=$(cat $ARTIFACT/build/bootJarMainClassName)
 
@@ -33,7 +32,7 @@ GRAALVM_VERSION=$(native-image --version)
 echo "Compiling $ARTIFACT with $GRAALVM_VERSION"
 { time native-image \
   --verbose \
-  -Dspring.spel.ignore=true \
+  -Dspring.spel.ignore=false \
   -Dspring.native.remove-yaml-support=true \
   $EXTRA_ARGS \
   -H:Name=$ARTIFACT \
