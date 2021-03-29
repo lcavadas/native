@@ -16,7 +16,7 @@ import java.util.UUID;
 class EmployeeController {
 
   private final PagingAndSortingRepository<Employee, UUID> repository;
-  private RabbitTemplate template;
+  private final RabbitTemplate template;
 
   EmployeeController(PagingAndSortingRepository<Employee, UUID> repository, RabbitTemplate template) {
     this.repository = repository;

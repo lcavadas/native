@@ -5,13 +5,18 @@ if [[ $# -eq 0 && ! -d "$1" ]]; then
   exit 1
 fi
 
-if [[ "$1" -eq "groovy" ]]; then
+if [[ "$1" == "groovy" ]]; then
   EXTRA_ARGS="--initialize-at-build-time=sun.instrument.InstrumentationImpl"
 fi
 
-#if [[ "$1" -eq "java-jpa" ]]; then
+if [[ "$1" == "java-jpa" ]]; then
 #  EXTRA_ARGS="--enable-all-security-services -H:+AddAllCharsets"
-#fi
+  EXTRA_ARGS="-H:IncludeResources=.*/db/.*"
+fi
+
+if [[ "$2" == "--debug" ]]; then
+  EXTRA_ARGS="$EXTRA_ARGS --verbose -H:Log=registerResource -H:+PrintAnalysisCallTree -H:+TraceServiceLoaderFeature"
+fi
 
 ARTIFACT=$1
 
@@ -35,7 +40,6 @@ CP=BOOT-INF/classes:$LIBPATH
 GRAALVM_VERSION=$(native-image --version)
 echo "Compiling $ARTIFACT with $GRAALVM_VERSION"
 { time native-image \
-  --verbose \
   -Dspring.spel.ignore=false \
   -Dspring.native.remove-yaml-support=true \
   $EXTRA_ARGS \
@@ -44,9 +48,9 @@ echo "Compiling $ARTIFACT with $GRAALVM_VERSION"
 
 if [[ -f $ARTIFACT ]]; then
   printf "${GREEN}SUCCESS${NC} - $ARTIFACT\n"
-  mv ./$ARTIFACT ../nattive-$ARTIFACT
+  mv ./$ARTIFACT ../native-$ARTIFACT
   cd ..
-  ./nattive-$ARTIFACT
+  ./native-$ARTIFACT -Dspring.profiles.active=native
 else
   cat output.txt
   printf "${RED}FAILURE${NC}: an error occurred when compiling the native-image.\n"

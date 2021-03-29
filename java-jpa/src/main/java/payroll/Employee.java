@@ -1,13 +1,19 @@
 package payroll;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 class Employee {
 
   @Id
@@ -15,6 +21,8 @@ class Employee {
   private UUID id;
   private String name;
   private String role;
+  @Type(type = "jsonb")
+  Map<String, Object> metadata = new HashMap<>();
 
   public UUID getId() {
     return this.id;
@@ -40,24 +48,11 @@ class Employee {
     this.role = role;
   }
 
-  @Override
-  public boolean equals(Object o) {
-
-    if (this == o)
-      return true;
-    if (!(o instanceof Employee))
-      return false;
-    Employee employee = (Employee) o;
-    return Objects.equals(this.id, employee.id) && Objects.equals(this.name, employee.name) && Objects.equals(this.role, employee.role);
+  public Map<String, Object> getMetadata() {
+    return metadata;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(this.id, this.name, this.role);
-  }
-
-  @Override
-  public String toString() {
-    return "Employee{" + "id=" + this.id + ", name='" + this.name + '\'' + ", role='" + this.role + '\'' + '}';
+  public void setMetadata(Map<String, Object> metadata) {
+    this.metadata = metadata;
   }
 }

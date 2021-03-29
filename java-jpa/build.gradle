@@ -23,6 +23,8 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-amqp'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+  implementation 'com.vladmihalcea:hibernate-types-52:2.10.2'
+
   implementation 'org.postgresql:postgresql:42.2.18'
   implementation 'org.flywaydb:flyway-core:6.5.7'
 
@@ -30,6 +32,20 @@ dependencies {
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.amqp:spring-rabbit-test'
+}
+
+clean.doLast {
+  List<String> locations = [ ]
+  sourceSets.main.resources.each {
+    String path = it.path.replaceAll("$projectDir/src/main/resources/", '')
+    if (path.startsWith('db/migration')) {
+      locations.add("classpath:$path")
+    }
+  }
+  FileWriter profileConfigFile = new FileWriter("$projectDir/src/main/resources/application-native.properties")
+  profileConfigFile.write("spring.flyway.locations=${locations.join(',')}")
+  profileConfigFile.flush()
+  profileConfigFile.close()
 }
 
 test {
